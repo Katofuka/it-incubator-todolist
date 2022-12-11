@@ -1,40 +1,44 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import './App.css';
-import { Todolist } from './components/Todolist';
-import { v1 } from "uuid";
+import {TaskType, Todolist} from './components/Todolist';
+import {v1} from "uuid";
 
 export type FilterValueType = 'all' | 'active' | 'completed'
 
-type TodoListsType = {
+export type TodoListsType = {
     id: string
     title: string
     filter: FilterValueType
 }
 
+type TasksStateType = {
+    [key: string]: Array<TaskType>
+}
+
 function App() {
     const todolistID1 = v1()
     const todolistID2 = v1()
-    let [tasks, setTasks] = useState({
+    let [tasks, setTasks] = useState<TasksStateType>({
         [todolistID1]: [
-            { id: v1(), title: "HTML&CSS", isDone: true },
-            { id: v1(), title: "JS", isDone: true },
-            { id: v1(), title: "ReactJs", isDone: false },
-            { id: v1(), title: "rest api", isDone: false },
-            { id: v1(), title: "graphQL", isDone: true }
+            {id: v1(), title: "HTML&CSS", isDone: true},
+            {id: v1(), title: "JS", isDone: true},
+            {id: v1(), title: "ReactJs", isDone: false},
+            {id: v1(), title: "rest api", isDone: false},
+            {id: v1(), title: "graphQL", isDone: true}
         ],
         [todolistID2]: [
-            { id: v1(), title: "milk", isDone: true },
-            { id: v1(), title: "flowers", isDone: false },
-            { id: v1(), title: "butter", isDone: false },
+            {id: v1(), title: "milk", isDone: true},
+            {id: v1(), title: "flowers", isDone: false},
+            {id: v1(), title: "butter", isDone: false},
         ]
     })
     //const [filter, setFilter] = useState<FilterValueType>('all')
     let [todoLists, setTodoLists] = useState<Array<TodoListsType>>([
-        { id: todolistID1, title: 'What to learn', filter: 'all' },
-        { id: todolistID2, title: 'What to buy', filter: 'all' },
+        {id: todolistID1, title: 'What to learn', filter: 'all'},
+        {id: todolistID2, title: 'What to buy', filter: 'all'},
     ])
 
-    const [title, setTitle] = useState("")
+
     const [error, setError] = useState<string | null>(null)
 
 
@@ -50,16 +54,21 @@ function App() {
         const todolistTasks = tasks[todolistId]
 
         tasks[todolistId] = todolistTasks.filter(task => task.id !== id)
-        setTasks({ ...tasks })
+        setTasks({...tasks})
     }
 
     function addTask(newTitle: string, todolistId: string) {
-        let task = { id: v1(), title: newTitle, isDone: false }
+        let task = {id: v1(), title: newTitle, isDone: false}
         const todolistTasks = tasks[todolistId]
 
         tasks[todolistId] = [task, ...todolistTasks];
-        setTasks({ ...tasks })
-        setTitle('')
+        setTasks({...tasks})
+    }
+
+    const removeTodolist = (id: string) => {
+        setTodoLists(todoLists.filter(todolist => todolist.id !== id))
+        delete tasks[id]
+        setTasks({...tasks})
     }
 
     function changeTaskStatus(id: string, isDone: boolean, todolistId: string) {
@@ -68,7 +77,7 @@ function App() {
         let task = todolistTasks.find(t => t.id === id)
         if (task) {
             task.isDone = isDone;
-            setTasks({ ...tasks })
+            setTasks({...tasks})
         }
     }
 
@@ -90,12 +99,13 @@ function App() {
                     <Todolist
                         id={todoList.id}
                         key={todoList.id}
-                        title={todoList.title}
-                        setTitle={setTitle}
-                        task={tasksForTodolist}
+                        setTodoLists={setTodoLists}
+                        todoLists={todoLists}
+                        titleTodo={todoList.title}
+                        tasks={tasksForTodolist}
                         changeFilter={changeFilter}
                         remove={removeTask}
-                        
+                        removeTodolist={removeTodolist}
                         addTask={addTask}
                         changeTaskStatus={changeTaskStatus}
                         error={error}
