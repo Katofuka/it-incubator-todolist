@@ -94,13 +94,6 @@ function App() {
     }
 
     function onChangeTaskTitle(taskId: string, todolistId: string, title: string) {
-        //CHANGE TODOLISTNAME
-        // let todolist = todolists.find(tl => tl.id === todolistId);
-        // debugger
-        // if (todolist) {
-        //     todolist.title = title;
-        //     setTodolists([...todolists])
-        // }
         //достанем нужный массив по todolistId:
         let todolistTasks = tasks[todolistId];
         // найдём нужную таску:
