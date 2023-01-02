@@ -24,10 +24,7 @@ function App() {
     let todolistId1 = v1();
     let todolistId2 = v1();
 
-    let [todolists, setTodolists] = useState<Array<TodolistType>>([
-        {id: todolistId1, title: "What to learn", filter: "all"},
-        {id: todolistId2, title: "What to buy", filter: "all"}
-    ])
+
 
     let [tasks, setTasks] = useState<TasksStateType>({
         [todolistId1]: [
@@ -73,6 +70,24 @@ function App() {
         }
     }
 
+    function onChangeTaskTitle(taskId: string, todolistId: string, title: string) {
+        //достанем нужный массив по todolistId:
+        let todolistTasks = tasks[todolistId];
+        // найдём нужную таску:
+        let task = todolistTasks.find(t => t.id === taskId);
+        //изменим таску, если она нашлась
+        if (task) {
+            task.title = title;
+            // засетаем в стейт копию объекта, чтобы React отреагировал перерисовкой
+            setTasks({...tasks});
+        }
+    }
+
+    let [todolists, setTodolists] = useState<Array<TodolistType>>([
+        {id: todolistId1, title: "What to learn", filter: "all"},
+        {id: todolistId2, title: "What to buy", filter: "all"}
+    ])
+
     function changeFilter(value: FilterValuesType, todolistId: string) {
         let todolist = todolists.find(tl => tl.id === todolistId);
         if (todolist) {
@@ -90,32 +105,19 @@ function App() {
         setTasks({...tasks});
     }
 
-    function addTodolist(title: string) {
-        let newTodolistId = v1()
-        let newTodolist: TodolistType = {id: newTodolistId, title: title, filter: 'all'}
-        setTodolists([newTodolist, ...todolists])
-        setTasks({...tasks, [newTodolistId]: []})
-    }
-
-    function onChangeTaskTitle(taskId: string, todolistId: string, title: string) {
-        //достанем нужный массив по todolistId:
-        let todolistTasks = tasks[todolistId];
-        // найдём нужную таску:
-        let task = todolistTasks.find(t => t.id === taskId);
-        //изменим таску, если она нашлась
-        if (task) {
-            task.title = title;
-            // засетаем в стейт копию объекта, чтобы React отреагировал перерисовкой
-            setTasks({...tasks});
-        }
-    }
-
-    function onChangeHeaderTitle(todolistId: string, title: string) {
+    function onChangeTodolistTitle(todolistId: string, title: string) {
         let todolist = todolists.find(tl => tl.id === todolistId);
         if (todolist) {
             todolist.title = title;
             setTodolists([...todolists])
         }
+    }
+
+    function addTodolist(title: string) {
+        let newTodolistId = v1()
+        let newTodolist: TodolistType = {id: newTodolistId, title: title, filter: 'all'}
+        setTodolists([newTodolist, ...todolists])
+        setTasks({...tasks, [newTodolistId]: []})
     }
 
     return (
@@ -152,7 +154,7 @@ function App() {
                                         filter={tl.filter}
                                         removeTodolist={removeTodolist}
                                         onChangeTaskTitle={onChangeTaskTitle}
-                                        onChangeHeaderTitle={onChangeHeaderTitle}
+                                        onChangeHeaderTitle={onChangeTodolistTitle}
                                     />
                                 </Paper>
                             </Grid>
