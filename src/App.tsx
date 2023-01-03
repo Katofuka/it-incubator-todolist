@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import './App.css';
-import {TaskType, Todolist} from './Todolist';
+import {TaskType, Todolist} from './conponents/Todolist';
 import {v1} from 'uuid';
 import {AddItemForm} from "./conponents/addItemForm/AddItemForm";
 import {Header} from "./conponents/Header";
@@ -154,8 +154,8 @@ function App() {
                                         changeTaskStatus={changeStatus}
                                         filter={tl.filter}
                                         removeTodolist={removeTodolist}
-                                        onChangeTaskTitle={onChangeTaskTitle}
-                                        onChangeHeaderTitle={onChangeTodolistTitle}
+                                        changeTaskTitle={onChangeTaskTitle}
+                                        changeTodolistTitle={onChangeTodolistTitle}
                                     />
                                 </Paper>
                             </Grid>
