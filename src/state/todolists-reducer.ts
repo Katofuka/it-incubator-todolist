@@ -2,6 +2,24 @@ import {FilterValuesType, TodolistType} from "../App";
 import { v1 } from "uuid"
 import { title } from "process";
 
+export const RemoveTodolistAction = (todolistId: string): RemoveTodolistActionType => {
+    return {type: 'REMOVE-TODOLIST', id: todolistId}
+}
+
+export const AddTodolistAction = (newTitle: string): AddTodolistActionType => {
+    return {type: 'ADD-TODOLIST', title: newTitle}
+}
+
+
+export const ChangeTodolistTitileAction = (todolistId:string, newTitle: string): ChangeTodolistTitleType => {
+    return {type: 'CHANGE-TODOLIST-TITLE' as const, id: todolistId, title: newTitle}
+}
+
+export const ChangeTodolistFilterAction = (todolistId:string, newFilter: FilterValuesType): ChangeTodolistFilterType => {
+    return {type: 'CHANGE-TODOLIST-FILTER' as const, id: todolistId, filter: newFilter}
+}
+
+
 export type RemoveTodolistActionType = {
     type: 'REMOVE-TODOLIST',
     id: string,
