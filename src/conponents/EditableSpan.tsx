@@ -19,6 +19,7 @@ export const EditableSpan = (props: EditableSpanPropsType) => {
     const activateViewMode = () => {
         setEditMode(false)
         onChange(title)
+
     }
     const onChangeHandler = (event: ChangeEvent<HTMLInputElement>)=> {
         setTitle(event.currentTarget.value)

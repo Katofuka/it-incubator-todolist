@@ -28,7 +28,7 @@ export type ChangeTitleTaskActionType = {
     title: string,
 }
 
-type ActionType =
+export type ActionType =
     RemoveTaskActionType
     | AddTaskActionType
     | ChangeStatusTaskActionType
@@ -36,8 +36,9 @@ type ActionType =
     | addTodolistActionType
     | removeTodolistActionType
 
+const initialState: TasksStateType = {}
 
-export const tasksReducer = (state: TasksStateType, action: ActionType) => {
+export const tasksReducer = (state: TasksStateType = initialState, action: ActionType): TasksStateType => {
     switch (action.type) {
         case 'REMOVE-TASK': {
             const stateCopy = {...state};
@@ -53,22 +54,12 @@ export const tasksReducer = (state: TasksStateType, action: ActionType) => {
             return stateCopy;
         }
         case 'CHANGE-TASK-STATUS': {
-            let stateCopy = {...state};
-            let todolistTasks = stateCopy[action.todolistId];
-            let task = todolistTasks.find(t => t.id === action.taskId);
-            if (task) {
-                task.isDone = action.isDone;
-            }
-            return stateCopy;
+            return {...state,[action.todolistId]: state[action.todolistId]
+                .map(t => t.id === action.taskId ? {...t, isDone: action.isDone}:t)}
         }
         case 'CHANGE-TASK-TITLE': {
-            let stateCopy = {...state};
-            let todolistTasks = stateCopy[action.todolistId];
-            let task = todolistTasks.find(t => t.id === action.taskId);
-            if (task) {
-                task.title = action.title;
-            }
-            return stateCopy;
+            return {...state,[action.todolistId]: state[action.todolistId]
+                    .map(t => t.id === action.taskId ? {...t, title: action.title}:t)}
         }
         case 'ADD-TODOLIST': {
             const stateCopy = {...state};
@@ -81,24 +72,24 @@ export const tasksReducer = (state: TasksStateType, action: ActionType) => {
             return stateCopy;
         }
         default:
-            throw new Error("I don't understand this type")
+            return state;
     }
 }
 
-export const removeTaskAC = (taskId: string, todolistId: string): RemoveTaskActionType => {
+export const removeTaskAction = (taskId: string, todolistId: string): RemoveTaskActionType => {
     return {type: 'REMOVE-TASK', taskId: taskId, todolistId: todolistId}
 }
 
-export const addTaskAC = (title: string, todolistId: string): AddTaskActionType => {
+export const addTaskAction = (title: string, todolistId: string): AddTaskActionType => {
     return {type: 'ADD-TASK', title: title, todolistId: todolistId}
 }
 
 
-export const changeTaskStatusAC = (taskId: string, isDone: boolean, todolistId: string): ChangeStatusTaskActionType => {
+export const changeTaskStatusAction = (taskId: string, isDone: boolean, todolistId: string): ChangeStatusTaskActionType => {
     return {type: 'CHANGE-TASK-STATUS', taskId: taskId, isDone: isDone, todolistId: todolistId}
 }
 
-export const changeTaskTitleAC = (taskId: string, title: string, todolistId: string): ChangeTitleTaskActionType => {
+export const changeTaskTitleAction = (taskId: string, todolistId: string, title: string): ChangeTitleTaskActionType => {
     return {type: 'CHANGE-TASK-TITLE', taskId: taskId, title: title, todolistId: todolistId}
 }
 

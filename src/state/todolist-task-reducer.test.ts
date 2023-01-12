@@ -2,9 +2,10 @@ import {TasksStateType, TodolistType} from "../App";
 import { tasksReducer } from "./tasks-reducer";
 import {addTodolistAction, removeTodolistAction, todolistsReducer} from "./todolists-reducer";
 
+let startState: TasksStateType
 
-test('new array should be added when new todolist is added', () => {
-    const startState: TasksStateType = {
+beforeEach(()=> {
+    startState = {
         'todolistId1': [
             {id: '1', title: 'CSS', isDone: false},
             {id: '2', title: 'JS', isDone: true},
@@ -16,12 +17,11 @@ test('new array should be added when new todolist is added', () => {
             {id: '3', title: 'tea', isDone: false}
         ]
     }
+})
 
+test('new array should be added when new todolist is added', () => {
     const action = addTodolistAction('new todolist')
-
     const endState = tasksReducer(startState, action)
-
-
     const keys = Object.keys(endState)
     const newKey = keys.find(k => k != 'todolistId1' && k != 'todolistId2')
     if (!newKey) {
@@ -49,8 +49,8 @@ test('ids should be equals', () => {
     expect(idFromTodolists).toBe(action.todolistId)
 })
 
-test('property with todolistId should be deleted', () => {
-    const startState: TasksStateType = {
+beforeEach(()=> {
+    startState = {
         'todolistId1': [
             {id: '1', title: 'CSS', isDone: false},
             {id: '2', title: 'JS', isDone: true},
@@ -62,12 +62,11 @@ test('property with todolistId should be deleted', () => {
             {id: '3', title: 'tea', isDone: false}
         ]
     }
+})
 
+test('property with todolistId should be deleted', () => {
     const action = removeTodolistAction('todolistId2')
-
     const endState = tasksReducer(startState, action)
-
-
     const keys = Object.keys(endState)
 
     expect(keys.length).toBe(1)

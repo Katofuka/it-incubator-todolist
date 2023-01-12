@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState} from 'react';
 import './App.css';
 import {TaskType, Todolist} from './conponents/Todolist';
 import {v1} from 'uuid';
@@ -20,14 +20,11 @@ export type TasksStateType = {
     [key: string]: Array<TaskType>
 }
 
-
 function App() {
     let todolistId1 = v1();
     let todolistId2 = v1();
 
-
-
-    let [tasks, setTasks] = useState<TasksStateType>({
+    let [tasks, setTasks] = useState({
         [todolistId1]: [
             {id: v1(), title: "HTML&CSS", isDone: true},
             {id: v1(), title: "JS", isDone: true}

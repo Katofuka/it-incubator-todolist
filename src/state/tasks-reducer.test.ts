@@ -1,8 +1,10 @@
 import { TasksStateType } from "../App"
-import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, tasksReducer} from "./tasks-reducer";
+import {addTaskAction, changeTaskStatusAction, changeTaskTitleAction, removeTaskAction, tasksReducer} from "./tasks-reducer";
 
-test('correct task should be removed', ()=>{
-    const startState: TasksStateType = {
+let startState: TasksStateType
+
+beforeEach(()=>{
+    startState= {
         'todolistId1': [
             {id: '1', title: 'CSS', isDone: false},
             {id: '2', title: 'JS', isDone: true},
@@ -14,7 +16,12 @@ test('correct task should be removed', ()=>{
             {id: '3', title: 'tea', isDone: false}
         ]
     }
-    const action = removeTaskAC('2', 'todolistId2')
+})
+
+
+test('correct task should be removed', ()=>{
+
+    const action = removeTaskAction('2', 'todolistId2')
 
     const endState = tasksReducer(startState, action)
 
@@ -32,9 +39,8 @@ test('correct task should be removed', ()=>{
 
 })
 
-
-test('new task should be added', ()=>{
-    const startState: TasksStateType = {
+beforeEach(()=>{
+    startState= {
         'todolistId1': [
             {id: '1', title: 'CSS', isDone: false},
             {id: '2', title: 'JS', isDone: true},
@@ -46,7 +52,10 @@ test('new task should be added', ()=>{
             {id: '3', title: 'tea', isDone: false}
         ]
     }
-    const action = addTaskAC('juice', 'todolistId2')
+})
+test('new task should be added', ()=>{
+
+    const action = addTaskAction('juice', 'todolistId2')
 
     const endState = tasksReducer(startState, action)
 
@@ -58,30 +67,8 @@ test('new task should be added', ()=>{
 
 })
 
-test('status of specified task should be changed', () => {
-    const startState: TasksStateType = {
-        'todolistId1': [
-            {id: '1', title: 'CSS', isDone: false},
-            {id: '2', title: 'JS', isDone: true},
-            {id: '3', title: 'React', isDone: false}
-        ],
-        'todolistId2': [
-            {id: '1', title: 'bread', isDone: true},
-            {id: '2', title: 'milk', isDone: true},
-            {id: '3', title: 'tea', isDone: true}
-        ]
-    }
-
-    const action = changeTaskStatusAC('2', false, 'todolistId2')
-
-    const endState = tasksReducer(startState, action)
-
-    expect(endState['todolistId2'][1].isDone).toBe(false)
-    expect(endState['todolistId2'][1].title).toBe('milk')
-})
-
-test('title of specified task should be changed', () => {
-    const startState: TasksStateType = {
+beforeEach(()=>{
+    startState= {
         'todolistId1': [
             {id: '1', title: 'CSS', isDone: false},
             {id: '2', title: 'JS', isDone: true},
@@ -93,8 +80,34 @@ test('title of specified task should be changed', () => {
             {id: '3', title: 'tea', isDone: false}
         ]
     }
+})
+test('status of specified task should be changed', () => {
+    const action = changeTaskStatusAction('2', false, 'todolistId2')
 
-    const action = changeTaskTitleAC('2', 'bread', 'todolistId2')
+    const endState = tasksReducer(startState, action)
+
+    expect(endState['todolistId2'][1].isDone).toBe(false)
+    expect(endState['todolistId2'][1].title).toBe('milk')
+})
+
+beforeEach(()=>{
+    startState= {
+        'todolistId1': [
+            {id: '1', title: 'CSS', isDone: false},
+            {id: '2', title: 'JS', isDone: true},
+            {id: '3', title: 'React', isDone: false}
+        ],
+        'todolistId2': [
+            {id: '1', title: 'bread', isDone: false},
+            {id: '2', title: 'milk', isDone: true},
+            {id: '3', title: 'tea', isDone: false}
+        ]
+    }
+})
+test('title of specified task should be changed', () => {
+
+
+    const action = changeTaskTitleAction('2', 'todolistId2', 'bread')
 
     const endState = tasksReducer(startState, action)
 
