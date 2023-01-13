@@ -1,4 +1,3 @@
-import Button from "@mui/material/Button/Button";
 import IconButton from "@mui/material/IconButton/IconButton";
 import TextField from "@mui/material/TextField/TextField";
 import React, {ChangeEvent, KeyboardEvent, useState} from "react";
@@ -40,6 +39,7 @@ export const AddItemForm = (props: AddItemFormPropsType) => {
                        onKeyPress={onKeyPressHandler}
                        error={!!error}
                        label='Title'
+                       value={title}
             helperText={error}>
 
             </TextField>
