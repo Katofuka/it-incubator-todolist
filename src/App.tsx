@@ -12,7 +12,7 @@ export type FilterValuesType = "all" | "active" | "completed";
 
 export type TodolistType = {
     id: string
-    title: string
+    titleTodo: string
     filter: FilterValuesType
 }
 
@@ -82,8 +82,8 @@ function App() {
     }
 
     let [todolists, setTodolists] = useState<Array<TodolistType>>([
-        {id: todolistId1, title: "What to learn", filter: "all"},
-        {id: todolistId2, title: "What to buy", filter: "all"}
+        {id: todolistId1, titleTodo: "What to learn", filter: "all"},
+        {id: todolistId2, titleTodo: "What to buy", filter: "all"}
     ])
 
     function changeFilter(value: FilterValuesType, todolistId: string) {
@@ -106,14 +106,14 @@ function App() {
     function onChangeTodolistTitle(todolistId: string, title: string) {
         let todolist = todolists.find(tl => tl.id === todolistId);
         if (todolist) {
-            todolist.title = title;
+            todolist.titleTodo = title;
             setTodolists([...todolists])
         }
     }
 
     function addTodolist(title: string) {
         let newTodolistId = v1()
-        let newTodolist: TodolistType = {id: newTodolistId, title: title, filter: 'all'}
+        let newTodolist: TodolistType = {id: newTodolistId, titleTodo: title, filter: 'all'}
         setTodolists([newTodolist, ...todolists])
         setTasks({...tasks, [newTodolistId]: []})
     }
@@ -143,7 +143,7 @@ function App() {
                                     <Todolist
                                         key={tl.id}
                                         id={tl.id}
-                                        title={tl.title}
+                                        title={tl.titleTodo}
                                         tasks={tasksForTodolist}
                                         removeTask={removeTask}
                                         changeFilter={changeFilter}

@@ -27,7 +27,7 @@ export type FilterValuesType = "all" | "active" | "completed";
 
 export type TodolistType = {
     id: string
-    title: string
+    titleTodo: string
     filter: FilterValuesType
 }
 
@@ -40,8 +40,8 @@ function AppWithReducer() {
     let todolistId2 = v1();
 
     const initialStateTodolists: Array<TodolistType>  = [
-        {id: todolistId1, title: "What to learn", filter: "all"},
-        {id: todolistId2, title: "What to buy", filter: "all"}
+        {id: todolistId1, titleTodo: "What to learn", filter: "all"},
+        {id: todolistId2, titleTodo: "What to buy", filter: "all"}
     ]
 
     const initialStateTasks: TasksStateType = {
@@ -122,7 +122,7 @@ function AppWithReducer() {
                                     <Todolist
                                         key={tl.id}
                                         id={tl.id}
-                                        title={tl.title}
+                                        title={tl.titleTodo}
                                         tasks={tasksForTodolist}
                                         removeTask={removeTask}
                                         changeFilter={changeFilter}
