@@ -1,4 +1,4 @@
-import axios from "axios"
+import axios from 'axios';
 
 export enum TaskStatus {
     New = 0,
@@ -15,7 +15,8 @@ export enum TaskPriorities {
     Later = 4,
 }
 
-type TaskType = {
+export type TaskType = {
+    id: string
     description: string
     title: string
     completed: boolean
@@ -23,7 +24,6 @@ type TaskType = {
     priority: TaskPriorities
     startDate: string
     deadline: string
-    id: string
     todoListId: string
     order: number
     addedDate: string

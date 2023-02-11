@@ -15,11 +15,11 @@ export type ResponseType<D> = {
     data: D
 }
 
-type TodolistType = {
+export type TodolistType = {
     id: string
+    title: string
     addedDate: string
     order: number
-    title: string
 }
 
 export const todolistAPI = {
