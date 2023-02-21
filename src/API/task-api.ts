@@ -19,7 +19,6 @@ export type TaskType = {
     id: string
     description: string
     title: string
-    completed: boolean
     status: TaskStatus
     priority: TaskPriorities
     startDate: string
@@ -45,13 +44,23 @@ const instance = axios.create({
 
 export const tasksApi = {
     getTasks(todolistId: string) {
-        return instance.get<TaskType>(`${todolistId}/tasks`)
+        return instance.get<{ items: TaskType[], totalCount: number, error: string }>(`${todolistId}/tasks`)
+            .then(res => res.data.items)
     },
     createTask(todolistId: string, title: string) {
-        return instance.post<TaskResponseType<{}>>(`${todolistId}/tasks`, {title: title})
+        return instance.post<TaskResponseType<{ item: TaskType }>>(`${todolistId}/tasks`, {title: title})
+            .then(response => response.data.data.item)
     },
-    updateTask(todolistId: string, taskId: string, title: string) {
-        return instance.put<TaskResponseType<{}>>(`${todolistId}/tasks/${taskId}`, {title: title})
+    updateTask(todolistId: string, taskId: string, taskBody: {
+        title: string,
+        startDate: string,
+        priority: TaskPriorities,
+        description: string,
+        deadline: string,
+        status: TaskStatus,
+    }) {
+        return instance.put<TaskResponseType<{ item: TaskType }>>(`${todolistId}/tasks/${taskId}`, taskBody)
+            .then(response => response.data.data.item)
     },
     deleteTask(todolistId: string, taskId: string) {
         return instance.delete<TaskResponseType<{}>>(`${todolistId}/tasks/${taskId}`)

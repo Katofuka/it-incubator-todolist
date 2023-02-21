@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {tasksApi} from "../API/task-api";
+import {TaskPriorities, tasksApi, TaskStatus} from "../API/task-api";
 
 export default {
     title: 'Todolist/API/Task',
@@ -10,8 +10,8 @@ export const GetTasksList = () => {
     const [state, setState] = useState<any>(null)
     useEffect(()=> {
         tasksApi.getTasks('a2c836b1-bac8-4db1-983b-bdcd733eb6d7')
-            .then(response =>{
-                setState(response.data)
+            .then(responseTasks =>{
+                setState(responseTasks)
             })
     },[])
     return <div>{JSON.stringify(state)}</div>
@@ -22,7 +22,7 @@ export const CreateTask = () => {
     useEffect(()=> {
         tasksApi.createTask('a2c836b1-bac8-4db1-983b-bdcd733eb6d7', 'new title for task')
             .then(response =>{
-                setState(response.data)
+                setState(response)
             })
     },[])
     return <div>{JSON.stringify(state)}</div>
@@ -31,9 +31,16 @@ export const CreateTask = () => {
 export const UpdateTask = () => {
     const [state, setState] = useState<any>(null)
     useEffect(()=> {
-        tasksApi.updateTask('5772f4eb-00cb-4ece-9091-0c40a154f67f', '6848c8d7-396e-4b6f-be71-1b2ca2f3cba8','хлеб')
+        tasksApi.updateTask('5772f4eb-00cb-4ece-9091-0c40a154f67f', '6848c8d7-396e-4b6f-be71-1b2ca2f3cba8', {
+            title: 'title',
+            startDate: '',
+            priority: TaskPriorities.Low ,
+            description: '',
+            deadline: '',
+            status: TaskStatus.New,
+        })
             .then(response =>{
-                setState(response.data)
+                setState(response)
             })
     },[])
     return <div>{JSON.stringify(state)}</div>

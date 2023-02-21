@@ -26,7 +26,7 @@ export const CreateTodolist = () => {
     useEffect(() => {
         todolistAPI.createTodolist('new title')
             .then((response)=>{
-                setState(response.data)
+                setState(response)
             })
         // здесь мы будем делать запрос и ответ закидывать в стейт.
         // который в виде строки будем отображать в div-ке
@@ -44,8 +44,6 @@ export const DeleteTodolist = () => {
                 setState(response.data)
 
             })
-        // здесь мы будем делать запрос и ответ закидывать в стейт.
-        // который в виде строки будем отображать в div-ке
     }, [])
 
     return <div>{JSON.stringify(state)}</div>
@@ -59,9 +57,6 @@ export const UpdateTodolist = () => {
             .then((response)=>{
                 setState(response.data)
             })
-        // {title: 'REACT>>>>>>>>>'},
-        // здесь мы будем делать запрос и ответ закидывать в стейт.
-        // который в виде строки будем отображать в div-ке
     }, [])
 
     return <div>{JSON.stringify(state)}</div>

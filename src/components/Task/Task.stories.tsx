@@ -30,7 +30,7 @@ export const TaskIsDoneExample = Template.bind({});
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
 TaskIsDoneExample.args = {
     ...baseArgs,
-    task: {id: '1', completed: true, title: 'JS', description: '', status: TaskStatus.New,
+    task: {id: '1', title: 'JS', description: '', status: TaskStatus.Completed,
         priority: TaskPriorities.Low, startDate: '', deadline: '', todoListId: '', order: 0, addedDate: ''},
     todolistId: 'todolistId1',
 };
@@ -39,7 +39,7 @@ export const TaskIsNotDoneExample = Template.bind({});
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
 TaskIsNotDoneExample.args = {
     ...baseArgs,
-    task: {id: '2', completed: false, title: 'Python', description: '', status: TaskStatus.New,
+    task: {id: '2', status: TaskStatus.New, title: 'Python', description: '',
         priority: TaskPriorities.Low, startDate: '', deadline: '', todoListId: '', order: 0, addedDate: ''},
     todolistId: 'todolistId1',
 };
