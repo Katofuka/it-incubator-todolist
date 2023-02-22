@@ -15,6 +15,34 @@ export enum TaskPriorities {
     Later = 4,
 }
 
+const instance = axios.create({
+    baseURL: 'https://social-network.samuraijs.com/api/1.1/todo-lists/',
+    withCredentials: true,
+    headers: {
+        'API-KEY': '1c6fc31b-2023-4b84-8640-ac2aa0578411',
+    },
+})
+
+//api
+export const tasksApi = {
+    getTasks(todolistId: string) {
+        return instance.get<{ items: TaskType[], totalCount: number, error: string }>(`${todolistId}/tasks`)
+            .then(res => res.data.items)
+    },
+    createTask(todolistId: string, title: string) {
+        return instance.post<TaskResponseType<{ item: TaskType }>>(`${todolistId}/tasks`, {title: title})
+            .then(response => response.data.data.item)
+    },
+    updateTask(todolistId: string, taskId: string, taskBody: UpdateTaskModelType) {
+        return instance.put<TaskResponseType<{ item: TaskType }>>(`${todolistId}/tasks/${taskId}`, taskBody)
+            .then(response => response.data.data.item)
+    },
+    deleteTask(todolistId: string, taskId: string) {
+        return instance.delete<TaskResponseType<{}>>(`${todolistId}/tasks/${taskId}`)
+    }
+}
+
+//api types
 export type TaskType = {
     id: string
     description: string
@@ -34,36 +62,11 @@ type TaskResponseType<D> = {
     data: D
 }
 
-const instance = axios.create({
-    baseURL: 'https://social-network.samuraijs.com/api/1.1/todo-lists/',
-    withCredentials: true,
-    headers: {
-        'API-KEY': '1c6fc31b-2023-4b84-8640-ac2aa0578411',
-    },
-})
-
-export const tasksApi = {
-    getTasks(todolistId: string) {
-        return instance.get<{ items: TaskType[], totalCount: number, error: string }>(`${todolistId}/tasks`)
-            .then(res => res.data.items)
-    },
-    createTask(todolistId: string, title: string) {
-        return instance.post<TaskResponseType<{ item: TaskType }>>(`${todolistId}/tasks`, {title: title})
-            .then(response => response.data.data.item)
-    },
-    updateTask(todolistId: string, taskId: string, taskBody: {
-        title: string,
-        startDate: string,
-        priority: TaskPriorities,
-        description: string,
-        deadline: string,
-        status: TaskStatus,
-    }) {
-        return instance.put<TaskResponseType<{ item: TaskType }>>(`${todolistId}/tasks/${taskId}`, taskBody)
-            .then(response => response.data.data.item)
-    },
-    deleteTask(todolistId: string, taskId: string) {
-        return instance.delete<TaskResponseType<{}>>(`${todolistId}/tasks/${taskId}`)
-    }
-
+export type UpdateTaskModelType = {
+    title: string,
+    startDate: string,
+    priority: TaskPriorities,
+    description: string,
+    deadline: string,
+    status: TaskStatus,
 }
