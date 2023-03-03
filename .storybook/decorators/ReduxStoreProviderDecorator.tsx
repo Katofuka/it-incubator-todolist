@@ -3,8 +3,9 @@ import React from 'react'
 import {AppRootStateType} from "../../src/app/store";
 import {tasksReducer} from "../../src/features/Todolists/tasks-reducer";
 import {v1} from "uuid";
-import {combineReducers, createStore} from "redux";
+import {applyMiddleware, combineReducers, createStore} from "redux";
 import {todolistsReducer} from "../../src/features/Todolists/todolists-reducer";
+import thunkMiddleware from "redux-thunk";
 
 const rootReducer = combineReducers({
     tasks: tasksReducer,
@@ -28,7 +29,7 @@ const initialGlobalState = {
     },
 }
 
-const storyBoolStore = createStore(rootReducer, initialGlobalState as AppRootStateType)
+const storyBoolStore = createStore(rootReducer, applyMiddleware(thunkMiddleware))
 
 export const ReduxStoreProviderDecorator = (storyFn: any) => {
     return <Provider store={storyBoolStore}> {storyFn()} </Provider>

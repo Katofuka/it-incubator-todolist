@@ -28,14 +28,16 @@ export const tasksApi = {
     getTasks(todolistId: string) {
         return instance.get<{ items: TaskType[], totalCount: number, error: string }>(`${todolistId}/tasks`)
             .then(res => res.data.items)
+            .catch(err => err)
     },
     createTask(todolistId: string, title: string) {
-        return instance.post<TaskResponseType<{ item: TaskType }>>(`${todolistId}/tasks`, {title: title})
-            .then(response => response.data.data.item)
+        return instance.post<TaskResponseType<{item: TaskType }>>(`${todolistId}/tasks`, {title: title})
+
     },
     updateTask(todolistId: string, taskId: string, taskBody: UpdateTaskModelType) {
         return instance.put<TaskResponseType<{ item: TaskType }>>(`${todolistId}/tasks/${taskId}`, taskBody)
             .then(response => response.data.data.item)
+            .catch(err => err)
     },
     deleteTask(todolistId: string, taskId: string) {
         return instance.delete<TaskResponseType<{}>>(`${todolistId}/tasks/${taskId}`)
