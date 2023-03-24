@@ -1,19 +1,17 @@
 import {
     AddTodolistActionType,
     changeTodolistEntityStatusAC,
-    ChangeTodolistEntityStatusActionType,
     RemoveTodolistActionType,
     SetTodolistsActionType
 } from './todolists-reducer';
 import {TaskPriorities, tasksApi, TaskStatus, TaskType, UpdateTaskModelType} from "../../API/task-api";
-import {Dispatch} from 'redux';
-import {AppRootStateType} from "../../app/store";
-import {SetAppErrorActionType, setAppStatusAction, SetAppStatusActionType} from "../../app/app-reducer";
+import {AppRootStateType, AppThunkType} from "../../app/store";
+import {setAppStatusAction} from "../../app/app-reducer";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
 
 const initialState: TasksDomainType = {}
 
-export const tasksReducer = (state: TasksDomainType = initialState, action: ActionsType): TasksDomainType => {
+export const tasksReducer = (state: TasksDomainType = initialState, action: TasksActionsType): TasksDomainType => {
     switch (action.type) {
         case 'REMOVE-TASK':
             return {
@@ -61,26 +59,26 @@ export const setTasksAC = (tasks: TaskType[], todolistId: string) =>
     ({type: 'SET-TASKS', tasks, todolistId} as const)
 
 //thunks
-export const fetchTasksTC = (todolistId: string) => (dispatch: Dispatch<ActionsType | SetAppStatusActionType>) => {
-    dispatch(setAppStatusAction('loading'))
-    tasksApi.getTasks(todolistId)
-        .then(responseTasks => {
-            dispatch(setTasksAC(responseTasks, todolistId))
-            dispatch(setAppStatusAction('succeeded'))
-        })
-}
+export const fetchTasksTC = (todolistId: string): AppThunkType =>
+    async (dispatch) => {
+        dispatch(setAppStatusAction('loading'))
+        const data = await tasksApi.getTasks(todolistId)
+        dispatch(setTasksAC(data, todolistId))
+        dispatch(setAppStatusAction('succeeded'))
 
-export const removeTaskTC = (todolistId: string, taskId: string) => (dispatch: Dispatch<ActionsType | SetAppStatusActionType>) => {
-    dispatch(setAppStatusAction('loading'))
-    tasksApi.deleteTask(todolistId, taskId)
-        .then(() => {
-            dispatch(removeTaskAC(todolistId, taskId))
-            dispatch(setAppStatusAction('succeeded'))
-        })
-}
+    }
 
-export const addTaskTC = (todolistId: string, title: string) =>
-    (dispatch: Dispatch<ActionsType | SetAppErrorActionType | SetAppStatusActionType | ChangeTodolistEntityStatusActionType>) => {
+export const removeTaskTC = (todolistId: string, taskId: string): AppThunkType =>
+    async (dispatch) => {
+        dispatch(setAppStatusAction('loading'))
+        await tasksApi.deleteTask(todolistId, taskId)
+        dispatch(removeTaskAC(todolistId, taskId))
+        dispatch(setAppStatusAction('succeeded'))
+
+    }
+
+export const addTaskTC = (todolistId: string, title: string): AppThunkType =>
+    (dispatch) => {
         dispatch(setAppStatusAction('loading'))
         dispatch(changeTodolistEntityStatusAC(todolistId, 'loading'))
         tasksApi.createTask(todolistId, title)
@@ -100,8 +98,8 @@ export const addTaskTC = (todolistId: string, title: string) =>
             })
     }
 
-export const updateTaskTC = (todolistId: string, taskId: string, domainModel: UpdateDomainTaskModelType) =>
-    (dispatch: Dispatch<ActionsType | SetAppErrorActionType | SetAppStatusActionType | ChangeTodolistEntityStatusActionType>, getState: () => AppRootStateType) => {
+export const updateTaskTC = (todolistId: string, taskId: string, domainModel: UpdateDomainTaskModelType): AppThunkType =>
+    (dispatch, getState: () => AppRootStateType) => {
         dispatch(setAppStatusAction('loading'))
         dispatch(changeTodolistEntityStatusAC(todolistId, 'loading'))
         const allTasksFromState = getState().tasks;
@@ -152,7 +150,7 @@ export type TasksDomainType = {
     [key: string]: Array<TaskType>
 }
 
-type ActionsType =
+export type TasksActionsType =
     | ReturnType<typeof addTaskAC>
     | ReturnType<typeof removeTaskAC>
     | ReturnType<typeof updateTaskAC>

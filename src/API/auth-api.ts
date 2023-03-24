@@ -14,6 +14,12 @@ export type ResponseType<D> = {
     data: D
 }
 
+export type LoginMeType = {
+    id: number
+    login: string
+    email: string
+}
+
 export type LoginParamsType= {
     email: string
     password: string
@@ -23,7 +29,15 @@ export type LoginParamsType= {
 
 export const authAPI = {
     login(data:LoginParamsType) {
-        return instance.post<ResponseType<{userId:number}>>('auth/login', data)
+        return instance.post<ResponseType<LoginMeType|{}>>('auth/login', data)
+            .then(response => response.data);
+    },
+    logout() {
+        return instance.delete<ResponseType<{}>>('auth/login')
+            .then(response => response.data);
+    },
+    me() {
+        return instance.get<ResponseType<{userId:number}>>('auth/me')
             .then(response => response.data);
 
     }
